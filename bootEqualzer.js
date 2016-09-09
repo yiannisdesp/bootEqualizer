@@ -30,7 +30,6 @@
 			
 			// get window width
 			var windowWidth = window.innerWidth;
-			console.log(windowWidth);
 
 			// define how many columns a row has
 			var columnsPerRow = 0;
@@ -44,7 +43,7 @@
 			var row = 1;
 			var secondLoopRow = 1;
 			var secondLoopCounter = 1;
-			console.log(columnsPerRow);
+
 			if(columnsPerRow > 0){
 				// calculate total rows
 				var totalRows = Math.ceil($(containerElement).children("." + settings.columnClass).length / columnsPerRow);
