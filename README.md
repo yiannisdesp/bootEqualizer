@@ -3,6 +3,9 @@
 Automatically equalize column heights on different breakpoints.
 Default breakpoints were set from bootstrap 3 grid.
 
+
+[Documentation](https://yiannisdesp.github.io/bootEqualizer/)
+
 ### Dependencies
  - jQuery 1.9+
 
