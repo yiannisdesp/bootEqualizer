@@ -118,10 +118,14 @@
 
 			// identify class or ID
         	var IDAttribute = $containerElement.attr('id');
-        	var className = ($containerElement.attr("class")).replace(new RegExp(" ", 'g'), ".");
+        	var classAttribute = $containerElement.attr("class");
+        	var className = "";
+        	if(classAttribute !== typeof undefined && classAttribute !== false && classAttribute !== undefined){
+        		className = classAttribute.replace(new RegExp(" ", 'g'), ".");
+        	}
 			
 			// For some browsers, 'attr' is undefined; for others, 'attr' is false.  Check for both.
-			if (typeof IDAttribute !== typeof undefined && IDAttribute !== false) {
+			if (typeof IDAttribute !== typeof undefined && IDAttribute !== false && IDAttribute !== undefined) {
 			    // take ID
 			    containerElement = "#" + IDAttribute;
 			}else{
