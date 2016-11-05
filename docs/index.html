@@ -17,7 +17,7 @@
     <header>
       <div class="inner">
         <h1>bootEqualizer</h1>
-        <h2>Automatically equalize column heights on each row depending on breakpoints</h2>
+        <h2>Automatically set columns height css attribute on each row depending on breakpoints</h2>
         <a href="https://github.com/yiannisdesp/bootEqualizer" class="button"><small>View project on</small> GitHub</a>
       </div>
     </header>
@@ -25,10 +25,10 @@
       <div class="inner clearfix">
         <section id="main-content">
           <h1>
-          <a id="bootequalizer-jquery-plugin-v009" class="anchor" href="#bootequalizer-jquery-plugin-v009" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>bootEqualizer jQuery Plugin v0.0.9</h1>
-          <p>Automatically equalize column heights on different breakpoints.<br>
-          Default breakpoints were set from bootstrap 3 grid.</p>
-          <a href="demo">View Demo</a>
+          <a id="bootequalizer-jquery-plugin-v009" class="anchor" href="#bootequalizer-jquery-plugin-v009" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>bootEqualizer jQuery Plugin v1.0.0</h1><br>
+          <p>Dynamically make all column blocks i.e. '.col-sm-6 .col-md-4 .col-lg-4' withing a container i.e. '.row' equal in height in each row depending on screen width breakpoint. The height is calculated to be equal the max height in the current row.<br><br>
+          The default breakpoints are calculated from the default boostrap 3 grid by reading the bootstrap classes in the HTML class attribute.</p>
+          <a href="demo" target="_blank">View Demo</a>
           <h3>
           <a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h3>
           <ul>
@@ -37,40 +37,54 @@
           <h4>
           <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h4>
           <ul>
-            <li>Include bootEqualizer.min.js</li>
+            <li>Include bootEqualizer.min.js after the jQuery.</li>
           </ul>
           <h4>
           <a id="how-it-works" class="anchor" href="#how-it-works" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How it works</h4>
           <h5>
           <a id="html" class="anchor" href="#html" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>HTML:</h5>
-          <pre>
-<code>
-&lt;!-- Columns wrapper --&gt;
-&lt;div id="bootEqualizer"&gt;
-    &lt;!-- Column --&gt;
-    &lt;div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 bootEqualizer-column"&gt;
-        &lt;!-- Column content --&gt;
-    &lt;/div&gt;
-    &lt;div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 bootEqualizer-column"&gt;
-        &lt;!-- Column content --&gt;
-    &lt;/div&gt;
-    &lt;div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 bootEqualizer-column"&gt;
-        &lt;!-- Column content --&gt;
-    &lt;/div&gt;
-    &lt;div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 bootEqualizer-column"&gt;
-        &lt;!-- Column content --&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-</code>
-          </pre>
+<pre>
+  <code>
+  <!-- Columns wrapper -->
+  &lt;div id="my-columns-wrapper"&gt;
+      &lt;!-- Column --&gt;
+      &lt;div class="col-xs-12 col-sm-6 col-md-4 col-lg-3"&gt;
+          &lt;!-- Column content --&gt;
+      &lt;/div&gt;
+      &lt;div class="col-xs-12 col-sm-6 col-md-4 col-lg-3"&gt;
+          &lt;!-- Column content --&gt;
+      &lt;/div&gt;
+      &lt;div class="col-xs-12 col-sm-6 col-md-4 col-lg-3"&gt;
+          &lt;!-- Column content --&gt;
+      &lt;/div&gt;
+      &lt;div class="col-xs-12 col-sm-6 col-md-4 col-lg-3"&gt;
+          &lt;!-- Column content --&gt;
+      &lt;/div&gt;
+  &lt;/div&gt;
+  </code>
+</pre>
           <h5>
           <a id="javascript" class="anchor" href="#javascript" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>JavaScript:</h5>
           <pre>
 <code>
-$("#bootEqualizer").bootEqualizer(); // with default options
-$("#bootEqualizer").bootEqualizer({ // with custom options
+// with default options
+$("#my-columns-wrapper").bootEqualizer(); 
+
+// with custom options
+$("#my-columns-wrapper").bootEqualizer({
     // options here
 });
+
+// a class can also be used for multiple elements like:
+$(".my-columns-wrapper").bootEqualizer();
+
+[!IMPORTANT]
+// in order to work when the window is resized,
+// we must call the method: recalculate: (see methods section below)
+$(window).resize(function(){
+    $('#bootEqualizer').bootEqualizer('recalculate');
+});
+
 </code>
           </pre>
           <h4>
@@ -78,19 +92,65 @@ $("#bootEqualizer").bootEqualizer({ // with custom options
           <pre>
           <code>
 {
-    // define how many columns will be displayed 
-    // in different breakpoints in assending order
+    // make use of boostrap default breakpoints
+    bootstrapDefaultBreakpoints: true,
+
+    // The following option is used only when
+    // bootstrapDefaultBreakpoints is set to false
+    //
+    // define columns in different breakpoints in assending order
+    // Example: breakpoints: { ScreenWidth : NumberOfColumns }
+    // Default Custom Values:
     breakpoints: {
-        768:2,
-        992:3,
-        1200:4
+      768  : 2, // screen width >= 768  -> 2 columns
+      992  : 3, // screen width >= 992  -> 3 columns
+      1200 : 4 // screen width >= 1200 -> 4 columns
     },
 
-    // margin between rows
-    rowSpace: 50,
+    // space in px between rows
+    spaceBetweenRows: 35,
+
+    // wrapper child element representing the column
+    column: 'div'
+}
+          </code>
+          </pre>
+
+          <h4>
+          <a id="callbacks" class="anchor" href="#callbacks" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Callbacks</h4>
+          <pre>
+          <code>
+{
+    // Currently there are 2 callbacks which can
+    // be used like:
+
+    $("#my-columns-wrapper").bootEqualizer({
+        onStart: function() {
+            // do something before calculation starts
+        },
+        onComplete: function() {
+            // do something after the calculation finishes
+        }
+    });
     
-    // element child columns class
-    columnClass: 'bootEqualizer-column'
+}
+          </code>
+          </pre>
+<h4>
+          <a id="methods" class="anchor" href="#methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Methods</h4>
+          <pre>
+          <code>
+{
+    // recalculate Method recalculates the column height within the
+    // new screen dimensions
+    
+    $("#my-columns-wrapper").bootEqualizer('recalculate');
+
+    // destroy Method removes the calculated height from the dom
+    
+    $("#my-columns-wrapper").bootEqualizer('destroy');
+
+    
 }
           </code>
           </pre>
